@@ -1,0 +1,119 @@
+Only in new: FILE_ID.DIZ
+Only in new: README.EMX
+Only in new: Makefile.emx
+Only in new: patches.emx
+diff -cbr orig/crypt.h new/crypt.h
+*** orig/crypt.h	Tue Aug  5 03:07:26 1997
+--- new/crypt.h	Wed Dec 31 16:04:52 1997
+***************
+*** 25,31 ****
+--- 25,44 ----
+  #ifndef _CRYPT_H
+  #define _CRYPT_H	1
+  
++ #ifdef __EMX__
++ #define __BEGIN_DECLS
++ #define __END_DECLS
++ #define __P(p) p
++ #define __USE_GNU
++ #define weak_alias(x, y)
++ #define __crypt_r    crypt_r
++ #define __fcrypt     fcrypt
++ #define __encrypt_r  encrypt_r
++ #define __setkey_r   setkey_r
++ #define __init_des   init_des
++ #else
+  #include <features.h>
++ #endif
+  
+  __BEGIN_DECLS
+  
+diff -cbr orig/speeds.c new/speeds.c
+*** orig/speeds.c	Wed Mar  5 01:33:58 1997
+--- new/speeds.c	Wed Dec 31 15:48:14 1997
+***************
+*** 28,40 ****
+  #ifdef NO_ITIMER
+  #include <sys/types.h>
+  #include <sys/times.h>
+  #else
+  #include <sys/time.h>
+  #endif
+  
+  static int cnt;
+  #ifdef NO_ITIMER
+! char *hz;
+  struct tms tstart, tfinish;
+  #endif
+  #define ITIME	10		/* Number of seconds to run test. */
+--- 28,41 ----
+  #ifdef NO_ITIMER
+  #include <sys/types.h>
+  #include <sys/times.h>
++ #include <sys/param.h>
+  #else
+  #include <sys/time.h>
+  #endif
+  
+  static int cnt;
+  #ifdef NO_ITIMER
+! int hz;
+  struct tms tstart, tfinish;
+  #endif
+  #define ITIME	10		/* Number of seconds to run test. */
+***************
+*** 48,54 ****
+  #ifdef NO_ITIMER
+      (void) times(&tfinish);
+      elapsed = ((tfinish.tms_utime + tfinish.tms_stime) -
+! 	(tstart.tms_utime + tstart.tms_stime)) / atoi(hz);
+      printf("elapsed time = %d sec,  CPU time = %f sec\n", ITIME, elapsed);
+  #else
+      elapsed = ITIME;
+--- 49,55 ----
+  #ifdef NO_ITIMER
+      (void) times(&tfinish);
+      elapsed = ((tfinish.tms_utime + tfinish.tms_stime) -
+! 	(tstart.tms_utime + tstart.tms_stime)) / hz;
+      printf("elapsed time = %d sec,  CPU time = %f sec\n", ITIME, elapsed);
+  #else
+      elapsed = ITIME;
+***************
+*** 81,95 ****
+     char *s;
+  #ifdef NO_ITIMER
+      extern char *getenv();
+  #else
+      struct itimerval itv;
+  #endif
+  
+  #ifdef NO_ITIMER
+!     if ((hz = getenv("HZ")) == NULL) {
+  	fprintf(stderr, "HZ environment parameter undefined\n");
+  	exit(1);
+      }
+  #endif
+  
+  #ifdef FCRYPT
+--- 82,102 ----
+     char *s;
+  #ifdef NO_ITIMER
+      extern char *getenv();
++     char *zh;
+  #else
+      struct itimerval itv;
+  #endif
+  
+  #ifdef NO_ITIMER
+! #ifdef __EMX__
+!     hz = HZ;
+! #else
+!     if ((zh = getenv("HZ")) == NULL) {
+  	fprintf(stderr, "HZ environment parameter undefined\n");
+  	exit(1);
+      }
++     hz = atoi(zh);
++ #endif
+  #endif
+  
+  #ifdef FCRYPT

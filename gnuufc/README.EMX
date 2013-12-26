@@ -1,0 +1,22 @@
+This copy of the GNU crypt library 2.0.4 has been adapted for emx+gcc
+using the emx 0.9c development tools. It can be used under OS/2, 
+DOS and Win32.
+
+An up to date copy should always be available as
+
+  ftp://ftp.leo.org/pub/comp/os/os2/leo/crypt/gnuufc.zip
+
+It requires emx 0.9c or newer under OS/2 and RSXNT 1.40 under Win32. 
+Both can be found at
+
+  ftp://ftp.leo.org/pub/comp/os/os2/leo/gnu/emx+gcc/...
+
+Kai Uwe Rommel
+
+--
+/* Kai Uwe Rommel                   ARS Computer & Consulting GmbH *
+ * rommel@ars.de                                 Muenchen, Germany *
+ * rommel@leo.org (http://www.leo.org/pub/comp/os/os2 maintenance) */
+
+DOS ... is still a real mode only non-reentrant interrupt
+handler, and always will be.                -Russell Williams

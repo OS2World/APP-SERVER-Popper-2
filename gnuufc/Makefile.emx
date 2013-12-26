@@ -1,0 +1,72 @@
+#
+# UFC-crypt: ultra fast crypt(3) implementation
+# Copyright (C) 1991, 1992, 1993 Free Software Foundation, Inc.
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Library General Public
+# License as published by the Free Software Foundation; either
+# version 2 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Library General Public License for more details.
+#
+# You should have received a copy of the GNU Library General Public
+# License along with this library; if not, write to the Free
+# Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+# @(#)Makefile	2.28 5/18/93
+#
+
+#
+# Which compiler & optimization flags to use
+#
+CC = gcc
+OFLAGS = -O
+LFLAGS = -s
+
+#
+# End-of-configuration
+#
+
+CFLAGS   = $(OFLAGS)
+CRYPTOBJ = crypt_util.o crypt.o crypt-entry.o
+
+#
+# Sample programs for debugging/testing/benchmarking
+#
+
+all: ufc.a ufc.lib ufc.exe speedf.exe cert.exe
+
+# Simple test for correct operation
+ufc.exe: ufc.c ufc.a
+	$(CC) $(CFLAGS) ufc.c ufc.a -o $@ $(LFLAGS)
+
+tests: all
+	cert < cert.input
+	ufc 1
+	speedf
+
+# Benchmark UFC fcrypt the crypt(3) in libc.a
+speedf.exe: ufc.a speeds.c
+	$(CC) $(CFLAGS) -DFCRYPT speeds.c ufc.a -o $@ $(LFLAGS)
+
+# DES validation suite
+cert.exe: ufc.a cert.c
+	$(CC) $(CFLAGS) cert.c ufc.a -o $@ $(LFLAGS)
+
+#
+
+ufc.a: $(CRYPTOBJ)
+	ar r $@ $(CRYPTOBJ)
+	ar s $@
+
+ufc.lib: ufc.a
+	emxomf -o $@ ufc.a
+
+crypt_util.o: crypt_util.c ufc-crypt.h
+crypt.o: crypt.c ufc-crypt.h
+
+clean:
+	rm -f *.o core *~ ufc.a ufc.lib ufc.exe speedf.exe cert.exe 

@@ -1,0 +1,7 @@
+GNU crypt library for emx+gcc.
+For OS/2, DOS and Win32.
+- version 2.0.6
+- requires emx 0.9c or newer under OS/2
+  and RSXNT 1.40 or newer under Win32
+- adapted by rommel@ars.de
+- ftp://ftp.leo.org/pub/comp/os/os2/leo/...

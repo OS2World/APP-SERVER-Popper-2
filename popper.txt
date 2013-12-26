@@ -1,0 +1,45 @@
+Popper/2
+PostOffice3 server/2 (C)vik@avi.kiev.ua 96-99
+
+Little pop3 server for os/2. tested with uupc/2
+You need to put _uncripted_ passwords in the second field of passwd file.
+You need tcp/ip installed.
+You need emx runtime installed.
+
+How to install:
+Just unzip it, add passwords in your passwd file and run.
+---passwd sample---
+root::::Superuser:c:\uupc\usr\root:
+    ^^Add your password here :
+root:toor:::Superuser:c:\uupc\usr\root:
+---end of passwd sample---
+
+
+Command line:
+popper <directory where maildrops are kept> <passwd file>
+If you have uupc installed at c:\uupc:
+popper c:\uupc\mail\boxes c:\uupc\conf\passwd
+
+You can reach me at fidonet 2:463/262 or 2:463/278 
+My email at home vik@avi.kiev.ua
+You can find new versions somewhere at http://os2.avi.kiev.ua
+
+apop(md5) and xmit (and others xtend commands) not implemented.
+
+
+fixes:
+0.91b  - PMMail comp. mode - new messages appends to end of maildrop
+0.92b  - bug when message is incomplete (popper fails)
+0.93b  - wait() bug :(
+0.94b  - wait() bug2 :(
+0.96b  - charset feature (all messages without Content-type sets to koi8)
+0.97b  - 0x0D 0x0A bug
+0.98b  - little bug fixed
+0.99b  - repair after crash added
+0.991b - message-id bug (?) fixed
+0.992b - minor bug fixed
+0.995b - minor bug fixed
+
+WBR
+vik@avi.kiev.ua
+
